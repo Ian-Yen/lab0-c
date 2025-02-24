@@ -113,6 +113,12 @@ int q_size(struct list_head *head)
     return count;
 }
 
+void q_del_element(struct list_head *head)
+{
+    list_del(head);
+    q_release_element(list_entry(head, element_t, list));
+}
+
 /* Delete the middle node in queue */
 bool q_delete_mid(struct list_head *head)
 {
@@ -132,9 +138,8 @@ bool q_delete_mid(struct list_head *head)
     if (tmp == NULL || tmp->next == tmp) {
         return true;
     }
-    list_del(tmp);
 
-    q_release_element(list_entry(tmp, element_t, list));
+    q_del_element(tmp);
     return true;
 }
 
