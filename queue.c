@@ -193,17 +193,13 @@ static inline void list_swap(struct list_head *entry1, struct list_head *entry2)
     list_add(entry1, pos);
 }
 
+void q_reverseK(struct list_head *head, int k);
+
 /* Swap every two adjacent nodes */
 void q_swap(struct list_head *head)
 {
-    struct list_head *pos, *n;
-    bool swap = false;
-    list_for_each_safe (pos, n, head) {
-        if (swap) {
-            list_swap(pos, pos->prev);
-        }
-        swap = !swap;
-    }
+    int k = 2;
+    q_reverseK(head, k);
 }
 
 /* Reverse elements in queue */
