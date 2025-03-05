@@ -235,6 +235,24 @@ void q_reverseK(struct list_head *head, int k)
         list_splice(&tmp, l);
     }
 }
+
+void mergeTwoLists(struct list_head *L1, struct list_head *L2, bool descend)
+{
+    element_t *e1 = list_entry(L1->next, element_t, list),
+              *e2 = list_entry(L2->next, element_t, list), *tmp;
+
+    while (&e1->list != L1 && &e2->list != L2) {
+        if (((strcmp(e1->value, e2->value)) > 0) ^ descend) {
+            tmp = list_entry(e2->list.next, element_t, list);
+            list_move(&e2->list, e1->list.prev);
+            e2 = tmp;
+        } else
+            e1 = list_entry(e1->list.next, element_t, list);
+    }
+
+    list_splice_tail(L2, L1);
+
+    return;
 }
 
 /* Sort elements of queue in ascending/descending order */
