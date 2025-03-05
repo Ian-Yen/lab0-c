@@ -255,8 +255,30 @@ void mergeTwoLists(struct list_head *L1, struct list_head *L2, bool descend)
     return;
 }
 
+
 /* Sort elements of queue in ascending/descending order */
-void q_sort(struct list_head *head, bool descend) {}
+void q_sort(struct list_head *head, bool descend)
+{
+    if (!head || list_empty(head) || list_is_singular(head))
+        return;
+
+    struct list_head *mid, *h = head->next, *t = head->prev;
+    while (h != t && t->next != h) {
+        h = h->next;
+        t = t->prev;
+    }
+    mid = t;
+
+    LIST_HEAD(tmp);
+    list_cut_position(&tmp, mid, head->prev);
+
+    q_sort(head, descend);
+    q_sort(&tmp, descend);
+
+    mergeTwoLists(head, &tmp, descend);
+
+    return;
+}
 
 /* Remove every node which has a node with a strictly less value anywhere to
  * the right side of it */
