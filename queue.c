@@ -150,7 +150,27 @@ bool q_delete_mid(struct list_head *head)
 /* Delete all nodes that have duplicate string */
 bool q_delete_dup(struct list_head *head)
 {
-    // https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+    if (!head || head->next == head)
+        return false;
+
+    element_t *pos = NULL, *n, *prev;
+    bool del = false;
+    list_for_each_entry_safe (pos, n, head, list) {
+        if (pos->list.prev == head)
+            continue;
+        prev = list_entry(pos->list.prev, element_t, list);
+        if (strcmp(pos->value, prev->value) == 0) {
+            q_del_element(&(prev->list));
+            del = true;
+        } else if (del) {
+            q_del_element(&(prev->list));
+            del = false;
+        }
+    }
+    if (del) {
+        q_del_element(head->prev);
+    }
+
     return true;
 }
 
