@@ -126,24 +126,16 @@ void q_del_element(struct list_head *head)
 /* Delete the middle node in queue */
 bool q_delete_mid(struct list_head *head)
 {
-    if (!head)
+    if (!head || list_empty(head))
         return false;
-    if (head == head->next)
-        return false;
-    bool move = false;
 
-    struct list_head *pos, *safe, *tmp = head;
-    list_for_each_safe (pos, safe, head) {
-        move = !move;
-        if (move) {
-            tmp = tmp->next;
-        }
-    }
-    if (tmp == NULL || tmp->next == tmp) {
-        return true;
+    struct list_head *h = head->next, *t = head->prev;
+    while (h != t && t->next != h) {
+        h = h->next;
+        t = t->prev;
     }
 
-    q_del_element(tmp);
+    q_del_element(t);
     return true;
 }
 
