@@ -1056,6 +1056,30 @@ static bool do_next(int argc, char *argv[])
     return q_show(0);
 }
 
+static void q_shuffle(struct list_head *head)
+{
+    if (!head || list_empty(head))
+        return;
+
+    struct list_head *tmp = head->next;
+    int len = q_size(head) + 1;
+    int num;
+
+    while (--len) {
+        struct list_head *current = tmp;
+        num = rand() % len;
+        for (int i = 0; i < num; i++) {
+            current = current->next;
+        }
+        if (!num) {
+            tmp = tmp->next;
+            continue;
+        }
+        list_del(current);
+        list_add_tail(current, tmp);
+    }
+}
+
 static void console_init()
 {
     ADD_COMMAND(new, "Create new queue", "");
