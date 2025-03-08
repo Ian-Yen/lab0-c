@@ -1080,8 +1080,30 @@ static void q_shuffle(struct list_head *head)
     }
 }
 
+static bool do_shuffle(int argc, char *argv[])
+{
+    if (argc != 1) {
+        report(1, "%s takes no arguments", argv[0]);
+        return false;
+    }
+
+    if (!current || !current->q) {
+        report(3, "Warning: Calling merge on null queue");
+        return false;
+    }
+    error_check();
+    if (current && exception_setup(true))
+        q_shuffle(current->q);
+    exception_cancel();
+    q_show(3);
+
+    return true;
+}
+
+
 static void console_init()
 {
+    ADD_COMMAND(shuffle, "shuffle", "");
     ADD_COMMAND(new, "Create new queue", "");
     ADD_COMMAND(free, "Delete queue", "");
     ADD_COMMAND(prev, "Switch to previous queue", "");
